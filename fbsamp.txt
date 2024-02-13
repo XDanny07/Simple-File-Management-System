@@ -1,0 +1,34 @@
+import { useState } from "react";
+import { storage } from "./firebase";
+import { ref, uploadBytes } from "firebase/storage";
+export default function App() {
+  const [file, setFile] = useState();
+
+  function fileupload() {
+    if (!file) return;
+    const file_ref = ref(storage, `test/${file.name}`);
+    uploadBytes(file_ref, file)
+      .then((response) => {
+        console.log(response);
+        alert("File Uploaded");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  return (
+    <div className="">
+      <input
+        type="file"
+        onChange={(e) => {
+          console.log(e.target.files);
+          setFile(e.target.files[0]);
+          //Something more
+        }}
+      />
+      <button onClick={fileupload} type="file/">
+        Upload File
+      </button>
+    </div>
+  );
+}
